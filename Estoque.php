@@ -7,8 +7,15 @@
  */
 class Estoque
 {
+
     private $produtos = array();
-    
+    private $pdo;
+
+    public function __construct(PDO $db)
+    {
+        $this->pdo = $db;
+    }
+
     /**
      * Adiciona um produto a tabela
      * @param Produto $produto
@@ -17,8 +24,10 @@ class Estoque
     public function addProduto(Produto $produto, $quantidade)
     {
         
+        $this->produtos[$produto->getCodigo()]['quantidade'] = $quantidade;
+        $this->produtos[$produto->getCodigo()]['produto'] = $produto;
     }
-    
+
     /**
      * Remove a quantidade do produto informado
      * @param Produto $produto
@@ -28,16 +37,18 @@ class Estoque
     {
         
     }
-    
+
     /**
      * Retorna atodos os produtos em estoque
      * @return array de Produtos
      */
     public function listarTudo()
     {
-        
+        $sql = 'SELECT * FROM produto';
+        $retorno = $this->pdo->query($sql);
+        return $retorno->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
     /**
      * Retorno o objeto pelo código informado
      * @param int $codigo
@@ -47,4 +58,13 @@ class Estoque
     {
         
     }
+
+    /**
+     * Sincroniza o objeto com banco de dados
+     */
+    public function sync()
+    {
+        
+    }
+
 }
