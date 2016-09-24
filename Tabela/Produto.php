@@ -1,5 +1,7 @@
 <?php
 
+namespace Hering\Tabela;
+
 /**
  * Mapeia os produtos na base de dados
  *

@@ -1,7 +1,10 @@
 <?php
 
-require_once 'Produto.php';
-require_once 'Estoque.php';
+require_once './Tabela/Produto.php';
+require_once './Estoque.php';
+
+use Hering\Tabela\Produto;
+use Hering\Estoque;
 
 $pdo = new PDO('mysql:host=localhost;port=3307;dbname=Estoque','root','elaborata');
 
@@ -34,7 +37,26 @@ $estoque->addProduto($produto, 5);
 $estoque->addProduto($produto2, 50);
 $estoque->addProduto($produto3, 2);
 
-var_dump($estoque);
+$prod = $estoque->listarProduto(666666);
+
+
+
+var_dump($prod);
+
+
+
+
+/*//Trata erro em caso de não ter quantida de produtos
+try{
+    $estoque->remProduto($produto2, 60);
+} catch (\Exception $ex) {
+    echo $ex->getMessage();
+}*/
+
+
+
+
+
 
 
 
