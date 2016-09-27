@@ -30,26 +30,15 @@ $estoque = Estoque::getInstance($pdo);
 
 $estoque->addProduto($produto, 5);
 $estoque->addProduto($produto2, 50);
+$estoque->addProduto($produto2, 2);
+
+$estoque->sync();
 
 var_dump($estoque);
 
-$tabela = new ProdutoTabela($pdo);
 
 
 
-//var_dump($caixa);
-//var_dump($caixa->totalPagar());
-//var_dump($tabela->findAll());
-
-
-
-
-/*//Trata erro em caso de não ter quantida de produtos
-try{
-    $estoque->remProduto($produto2, 60);
-} catch (\Exception $ex) {
-    echo $ex->getMessage();
-}*/
 
 
 

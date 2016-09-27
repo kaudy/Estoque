@@ -31,6 +31,16 @@ abstract class TabelaAdapter
         
     }
     
+    public function read()
+    {
+        
+    }
+    
+    public function delete()
+    {
+        
+    }
+    
     
     
     
