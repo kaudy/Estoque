@@ -1,4 +1,8 @@
 <?php
+namespace Hering;
+
+use Hering\Estoque;
+use Hering\Tabela\Produto;
 
 
 /**
@@ -9,8 +13,15 @@
 class Caixa
 {
     private $listaProdutos = array();
+    private $estoque;
+     
     
     
+    public function __construct(EStoque $estoque)
+    {
+        $this->estoque = $estoque;
+    }        
+
     /**
      * Adiciona o produto ao caixa
      * @param Produto $produto
@@ -18,8 +29,13 @@ class Caixa
      */    
     public function addProduto(Produto $produto, $quant)
     {
-        $this->produtos[$produto->getCodigo()]['quantidade'] = $quantidade;
-        $this->produtos[$produto->getCodigo()]['produto'] = $produto;
+        if(array_key_exists($produto->getCodigo(), $this->listaProdutos))
+        {
+            $quant += $this->listaProdutos[$produto->getCodigo()]['quantidade'];
+        }
+        
+        $this->listaProdutos[$produto->getCodigo()]['quantidade'] = $quant;
+        $this->listaProdutos[$produto->getCodigo()]['produto'] = $produto;
     }
     
     /**
@@ -27,7 +43,15 @@ class Caixa
      */    
     public function totalPagar()
     {
+        $total = 0;
         
+        foreach ($this->listaProdutos as $produto)
+        {
+            $valor = $produto['quantidade'] * $produto['produto']->getValor();
+            $total += $valor;
+        }
+        
+        return $total;
     }
     
     /**
@@ -35,7 +59,10 @@ class Caixa
      */
     public function pagar()
     {
-        
+        foreach ($this->listaProdutos as $produto)
+        {
+            $this->estoque->remProduto($produto['produto'],$produto['quantidade']);
+        }
     }
     
 }

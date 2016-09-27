@@ -16,14 +16,20 @@ abstract class TabelaAdapter
         $this->dbcon = $pdo;
     }
 
+    protected  function getDb()
+    {
+        return $this->dbcon;
+    }
+
+    public function update(Produto $produto)
+    {
+        
+    }
     
-    public function insert();
-    
-    public function read();
-    
-    public function delete();
-    
-    public function update();
+    public function create()
+    {
+        
+    }
     
     
     

@@ -1,10 +1,13 @@
 <?php
 
 require_once './Tabela/Produto.php';
+require_once './Tabela/ProdutoTabela.php';
 require_once './Estoque.php';
+require_once './Caixa.php';
 
 use Hering\Tabela\Produto;
 use Hering\Estoque;
+use Hering\Tabela\ProdutoTabela;
 
 $pdo = new PDO('mysql:host=localhost;port=3307;dbname=Estoque','root','elaborata');
 
@@ -22,26 +25,21 @@ $produto2->setCodigo(123456)
         ->setValor(4.44)
         ->setModelo('Trifil');
 
-$produto3 = new Produto();
-$produto3->setCodigo(5553333)
-        ->setNome('Camisa Polo')
-        ->setTamanho('G')
-        ->setValor(68.34)
-        ->setModelo('Lacoste');
 
+$estoque = Estoque::getInstance($pdo);
 
-
-
-$estoque = new Estoque($pdo);
 $estoque->addProduto($produto, 5);
 $estoque->addProduto($produto2, 50);
-$estoque->addProduto($produto3, 2);
 
-$prod = $estoque->listarProduto(666666);
+var_dump($estoque);
+
+$tabela = new ProdutoTabela($pdo);
 
 
 
-var_dump($prod);
+//var_dump($caixa);
+//var_dump($caixa->totalPagar());
+//var_dump($tabela->findAll());
 
 
 

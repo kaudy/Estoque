@@ -3,8 +3,9 @@
 namespace Hering;
 
 use Hering\Tabela\Produto;
+use Hering\Tabela\ProdutoTabela;
 /**
- * Gerencia os produtos em estoque
+ * Gerencia os produtos em estoque - Sing
  *
  * @author kaudy    
  */
@@ -12,15 +13,31 @@ class Estoque
 {
 
     private $produtos = array();
+    private $_produtosOriginal = array();
     
-    
+    private $tabela;    
+    static private $instancia;
     
     //Contrutor ****************************************************************
-    public function __construct()
+    private function __construct(\PDO $pdo)
     {
-        $this->sync();
-        
+        $this->tabela = new ProdutoTabela($pdo);
+        $this->sync();        
     }    
+    
+    /** ************************************************************************
+     * @param \PDO
+     * @return Estoque
+     **************************************************************************/
+    static public function getInstance(\PDO $pdo)
+    {
+        if(self::$instancia== NULL)
+        {
+            self::$instancia = new self($pdo);
+        }
+        
+        return self::$instancia;
+    }
 
     /** ************************************************************************
      * Adiciona um produto a tabela
@@ -63,6 +80,7 @@ class Estoque
      **************************************************************************/
     public function listarTudo()
     {
+        
         return $this->produtos;
     }
 
@@ -87,7 +105,34 @@ class Estoque
      **************************************************************************/
     public function sync()
     {
-        
+        if(count($this->produtos)==0)
+        {
+            $lista = $this->tabela->findAll();            
+            
+            foreach($lista as $produto)
+            {
+                $this->_produtosOriginal[$produto->getCodigo()]['produto'] = $produto;
+                $this->addProduto($produto, 0);
+            }
+        }else
+        {
+            foreach ($this->produtos as $codigo => $produto)
+            {
+                if(array_key_exists($codigo, $this->_produtosOriginal)== true)
+                {
+                    $this->tabela->update($produto['produto']);
+                }else
+                {
+                    $this->tabela->create($produto['produto']);
+                }
+            }
+            
+            $lista = $this->tabela->findAll();
+            foreach ($lista as $produto)
+            {
+                $this->_produtosOriginal[$produto->getCodigo()]['produto'] = $produto;
+            }
+        }
     }
 
 }
